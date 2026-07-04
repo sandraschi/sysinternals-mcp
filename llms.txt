@@ -29,6 +29,7 @@ FastMCP 3.4 wrapper for 12 Sysinternals CLI tools.
 | psfile | `list_remote_files()` | Line-oriented |
 | coreinfo | `get_cpu_info()` | Labeled sections |
 | du | `disk_usage()` | Line-oriented |
+| rammap | `rammap_*()` | WMI-based physical memory breakdown |
 | psinfo | `system_info()` | Labeled sections |
 
 ---

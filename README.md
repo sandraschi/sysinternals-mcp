@@ -1,6 +1,6 @@
 # Sysinternals MCP
 
-> **FastMCP 3.4 wrapper for 12 Sysinternals CLI tools** -- autorunsc, handle64, pslist, listdlls, tcpvcon, sigcheck, accesschk, psloggedon, psfile, coreinfo, du, psinfo.
+> **FastMCP 3.4 wrapper for 12 Sysinternals CLI tools (+ DIY RAMMap equivalent via WMI)** -- autorunsc, handle64, pslist, listdlls, tcpvcon, sigcheck, accesschk, psloggedon, psfile, coreinfo, du, psinfo, rammap.
 
 **Stack:** Python 3.12+ -- FastMCP 3.4.2 -- uv -- ruff
 
@@ -23,6 +23,7 @@ verifies the Authenticode signature, and caches it.
 | `psfile` | `list_remote_files()` | Remotely opened files on this machine |
 | `coreinfo` | `get_cpu_info()` | CPU topology, NUMA, cache, feature flags |
 | `du` | `disk_usage()` | Directory size breakdown (recursive) |
+| `rammap` | `rammap_physical()` / `rammap_processes()` / `rammap_file_backed()` / `rammap_summary()` | Physical memory breakdown via WMI (DIY RAMMap, no binary) |
 | `psinfo` | `system_info()` | System info: OS, uptime, hotfixes, services |
 
 ## Quick start

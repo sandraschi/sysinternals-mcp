@@ -29,6 +29,7 @@ from sysinternals_mcp.tools.psfile import register_tool as reg_psfile
 from sysinternals_mcp.tools.psinfo import register_tool as reg_psinfo
 from sysinternals_mcp.tools.pslist import register_tool as reg_pslist
 from sysinternals_mcp.tools.psloggedon import register_tool as reg_psloggedon
+from sysinternals_mcp.tools.rammap import register_tool as reg_rammap
 from sysinternals_mcp.tools.sigcheck import register_tool as reg_sigcheck
 from sysinternals_mcp.tools.tcpvcon import register_tool as reg_tcpvcon
 
@@ -54,6 +55,7 @@ EULA accepted once; stored in cache directory.
 - psfile     -- remotely opened files
 - coreinfo   -- CPU topology, NUMA, cache, feature flags
 - du         -- directory size breakdown
+- rammap     -- physical memory breakdown (DIY RAMMap via WMI, no binary)
 - psinfo     -- system info (OS, uptime, hotfixes, services)
     """,
     version="0.1.0",
@@ -88,6 +90,7 @@ def register_tools():
     reg_coreinfo(app, _manager)
     reg_du(app, _manager)
     reg_psinfo(app, _manager)
+    reg_rammap(app, _manager)
 
 
 register_tools()

@@ -1,0 +1,9 @@
+{
+  "name": "sysinternals-mcp",
+  "version": "0.1.0",
+  "description": "FastMCP 3.4 wrapper for 12 Sysinternals CLI tools",
+  "repository": "https://github.com/sandraschi/sysinternals-mcp",
+  "tags": ["sysinternals", "windows", "forensics", "system-tools"],
+  "transport": ["stdio", "http"],
+  "tools": ["autorunsc", "handle64", "pslist", "listdlls", "tcpvcon", "sigcheck", "accesschk", "psloggedon", "psfile", "coreinfo", "du", "psinfo"]
+}

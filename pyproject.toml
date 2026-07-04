@@ -1,0 +1,49 @@
+[project]
+name = "sysinternals-mcp"
+version = "0.1.0"
+description = "FastMCP 3.4 wrapper around 12 Sysinternals CLI tools: autorunsc, handle64, pslist, listdlls, tcpvcon, sigcheck, accesschk, psloggedon, psfile, coreinfo, du, psinfo"
+authors = [{ name = "Sandra Schipal" }]
+dependencies = [
+    "fastmcp>=3.4.2,<4",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+
+[project.scripts]
+sysinternals-mcp = "sysinternals_mcp.server:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sysinternals_mcp*"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9",
+    "pytest>=8.0.0",
+    "pytest-asyncio",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008", "B904", "S104", "S603", "E722", "RUF006", "RUF012", "B024"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/sysinternals_mcp/server.py" = ["E402", "F401"]
+"tests/**" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]

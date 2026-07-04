@@ -1,0 +1,13 @@
+{
+  "name": "sysinternals-mcp",
+  "version": "0.1.0",
+  "description": "FastMCP 3.4 wrapper for 12 Sysinternals CLI tools",
+  "author": "Sandra Schipal",
+  "license": "MIT",
+  "entry": "src/sysinternals_mcp/server.py",
+  "command": "uv run sysinternals-mcp",
+  "transport": "stdio",
+  "env": {
+    "MCP_PORT": "11074"
+  }
+}

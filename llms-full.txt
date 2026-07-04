@@ -1,0 +1,87 @@
+# Sysinternals MCP -- LLM corpus
+
+> Version 0.1.0. FastMCP 3.4 wrapper for 12 Sysinternals CLI tools.
+> First-run auto-downloads binaries from live.sysinternals.com; no EXEs committed to git.
+
+Generated: 2026-07-04
+
+---
+
+## Architecture
+
+```
+src/sysinternals_mcp/
+  server.py       -- FastMCP app, tool registration, dual transport (stdio/HTTP)
+  bin_manager.py  -- download, Authenticode verify, cache, EULA management
+  tools/
+    autoruns.py   -- autorunsc: startup/persistence CSV parser
+    handle.py     -- handle64: open handle parser
+    pslist.py     -- pslist: fixed-width process table
+    listdlls.py   -- listdlls: multi-section DLL listing
+    tcpvcon.py    -- tcpvcon: TCP/UDP connection CSV parser
+    sigcheck.py   -- sigcheck: Authenticode CSV parser
+    accesschk.py  -- accesschk: effective permissions text parser
+    psloggedon.py -- psloggedon: logged-on user table parser
+    psfile.py     -- psfile: remote open-file text parser
+    coreinfo.py   -- coreinfo: CPU topology label parser
+    du.py         -- du: directory size line parser
+    psinfo.py     -- psinfo: system info section parser
+```
+
+### Binary lifecycle
+
+1. On first `run()` call, `BinaryManager.ensure()` checks cache at
+   `%LOCALAPPDATA%/sysinternals-mcp/bin/`
+2. If missing, downloads from `https://live.sysinternals.com/<name>.exe`
+3. Verifies Authenticode: rejects anything not signed by Microsoft / Sysinternals
+4. EULA accepted once per machine (marker file in cache dir)
+5. Subsequent calls use cached binary directly
+
+### Output parsing
+
+| Tool | CLI flag | Parser |
+|------|----------|--------|
+| autorunsc | `-c` | `csv.DictReader` |
+| handle64 | `-v` | Regex: pid:name type handle |
+| pslist | (default) | Fixed-width column split |
+| listdlls | (default) | Multi-section regex |
+| tcpvcon | `-c` | `csv.DictReader` |
+| sigcheck | `-c` | `csv.DictReader` |
+| accesschk | (default) | Regex: access-level path |
+| psloggedon | (default) | Fixed-width table |
+| psfile | (default) | Path: header + details |
+| coreinfo | (default) | Label: value + feature flags |
+| du | `-v` | Regex: bytes path |
+| psinfo | (default) | Section: key: value |
+
+### Tool signatures
+
+```python
+autorunsc(accept_eula, hashes, verify, all_users) -> dict
+autorunsc_schedule(accept_eula, hashes) -> dict
+handle64(pattern, verbose) -> dict
+handle64_by_pid(pid) -> dict
+pslist(include_kernel, tree) -> dict
+pslist_detail(name) -> dict
+listdlls(verified) -> dict
+listdlls_by_pid(pid) -> dict
+tcpvcon(all_states) -> dict
+sigcheck(path, recursive, virus_total, accept_eula) -> dict
+accesschk(path, target, recursive, accept_eula) -> dict
+accesschk_service(service_name) -> dict
+psloggedon(local, network) -> dict
+psloggedon_server(server) -> dict
+psfile(path_filter, accept_eula) -> dict
+psfile_close(file_id) -> dict
+coreinfo(all_features) -> dict
+du(path, n_children, accept_eula) -> dict
+du_quick(path) -> dict
+psinfo(show_hotfixes, show_services) -> dict
+psinfo_remote(server) -> dict
+```
+
+### Standard return schema
+
+```json
+{"success": bool, "error": str | null, ...tool-specific fields...}
+```

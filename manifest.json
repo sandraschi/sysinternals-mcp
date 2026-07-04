@@ -1,0 +1,11 @@
+{
+  "name": "sysinternals-mcp",
+  "version": "0.1.0",
+  "description": "FastMCP 3.4 wrapper for 12 Sysinternals CLI tools: autorunsc, handle64, pslist, listdlls, tcpvcon, sigcheck, accesschk, psloggedon, psfile, coreinfo, du, psinfo",
+  "author": "Sandra Schipal",
+  "license": "MIT",
+  "tags": ["sysinternals", "windows", "system-tools", "forensics", "fastmcp"],
+  "repository": "https://github.com/sandraschi/sysinternals-mcp",
+  "transport": ["stdio", "http"],
+  "default_port": 11074
+}

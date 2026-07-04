@@ -1,0 +1,49 @@
+# Sysinternals MCP
+
+FastMCP 3.4 wrapper for 12 Sysinternals CLI tools.
+
+**Full detail: see [llms-full.txt](llms-full.txt)**
+
+---
+
+## Quick links
+
+- [README.md](README.md) -- overview and quick start
+- [INSTALL.md](INSTALL.md) -- install, IDE snippets
+- [CHANGELOG.md](CHANGELOG.md) -- release notes
+
+---
+
+## Tools
+
+| Tool | Entry point | Output format |
+|------|-------------|---------------|
+| autorunsc | `run_autorunsc()` | CSV |
+| handle64 | `list_handles()` | Parsed text |
+| pslist | `list_processes()` | Fixed-width |
+| listdlls | `list_all_dlls()` | Multi-section |
+| tcpvcon | `list_connections()` | CSV |
+| sigcheck | `run_sigcheck()` | CSV |
+| accesschk | `check_permissions()` | Line-oriented |
+| psloggedon | `list_logged_on_users()` | Fixed-width |
+| psfile | `list_remote_files()` | Line-oriented |
+| coreinfo | `get_cpu_info()` | Labeled sections |
+| du | `disk_usage()` | Line-oriented |
+| psinfo | `system_info()` | Labeled sections |
+
+---
+
+## Ports
+
+| Service | Port |
+|---------|------|
+| MCP HTTP transport | 11074 |
+
+---
+
+## Run
+
+```powershell
+uv sync --group dev
+uv run sysinternals-mcp
+```

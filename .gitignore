@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+data/
+mcpb/src/
+.ruff_cache/
+.pytest_cache/
+.coverage
+*.log
+.env

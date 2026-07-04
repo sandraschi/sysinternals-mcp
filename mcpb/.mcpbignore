@@ -1,0 +1,12 @@
+# MCPB ignore
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+.venv/
+.git/
+dist/
+tests/
+data/
+.env
+mcpb/

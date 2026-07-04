@@ -32,6 +32,7 @@ from sysinternals_mcp.tools.psloggedon import register_tool as reg_psloggedon
 from sysinternals_mcp.tools.rammap import register_tool as reg_rammap
 from sysinternals_mcp.tools.sigcheck import register_tool as reg_sigcheck
 from sysinternals_mcp.tools.tcpvcon import register_tool as reg_tcpvcon
+from sysinternals_mcp.tools.treemap import register_tool as reg_treemap
 
 app = FastMCP(
     "Sysinternals MCP",
@@ -56,6 +57,7 @@ EULA accepted once; stored in cache directory.
 - coreinfo   -- CPU topology, NUMA, cache, feature flags
 - du         -- directory size breakdown
 - rammap     -- physical memory breakdown (DIY RAMMap via WMI, no binary)
+- treemap    -- interactive memory treemap HTML (WizTree-style, D3.js)
 - psinfo     -- system info (OS, uptime, hotfixes, services)
     """,
     version="0.1.0",
@@ -91,6 +93,7 @@ def register_tools():
     reg_du(app, _manager)
     reg_psinfo(app, _manager)
     reg_rammap(app, _manager)
+    reg_treemap(app, _manager)
 
 
 register_tools()

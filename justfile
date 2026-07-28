@@ -1,3 +1,5 @@
+set windows-shell := ["powershell.exe", "-NoProfile", "-Command"]
+
 # Sysinternals MCP -- dev recipes
 serve port="11074":
     uv run python -m sysinternals_mcp.server --port {{port}}

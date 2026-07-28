@@ -16,9 +16,7 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="tcpvcon")
     def list_connections(
-        all_states: Annotated[
-            bool, Field(default=False, description="Show all states, incl. TIME_WAIT (-a)")
-        ] = False,
+        all_states: Annotated[bool, Field(default=False, description="Show all states, incl. TIME_WAIT (-a)")] = False,
     ) -> dict:
         """List all TCP/UDP connections with owning process.
 

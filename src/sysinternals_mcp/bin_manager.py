@@ -18,9 +18,18 @@ logger = logging.getLogger(__name__)
 
 SYSINTERNALS_URL = "https://live.sysinternals.com"
 TOOLS = [
-    "autorunsc", "handle64", "pslist", "listdlls", "tcpvcon",
-    "sigcheck", "accesschk64", "psloggedon", "psfile64",
-    "coreinfo", "du64", "psinfo",
+    "autorunsc",
+    "handle64",
+    "pslist",
+    "listdlls",
+    "tcpvcon",
+    "sigcheck",
+    "accesschk64",
+    "psloggedon",
+    "psfile64",
+    "coreinfo",
+    "du64",
+    "psinfo",
 ]
 
 _EULA_FLAG = "-accepteula"
@@ -129,27 +138,34 @@ class BinaryManager:
         ps = "powershell"
         result = subprocess.run(
             [
-                ps, "-NoProfile", "-Command",
+                ps,
+                "-NoProfile",
+                "-Command",
                 f"Get-AuthenticodeSignature '{path}' | Select-Object -ExpandProperty Status",
             ],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
         )
         status = result.stdout.strip()
         if status != "Valid":
             detail = subprocess.run(
                 [
-                    ps, "-NoProfile", "-Command",
+                    ps,
+                    "-NoProfile",
+                    "-Command",
                     f"(Get-AuthenticodeSignature '{path}').SignerCertificate.Subject",
                 ],
-                capture_output=True, text=True, timeout=15,
+                capture_output=True,
+                text=True,
+                timeout=15,
             )
             subject = detail.stdout.strip()
             if "Microsoft" not in subject or "Sysinternals" not in subject:
                 if path.exists():
                     path.unlink()
                 raise RuntimeError(
-                    f"Authenticode verification failed for {path.name}: "
-                    f"status={status}, subject={subject}"
+                    f"Authenticode verification failed for {path.name}: status={status}, subject={subject}"
                 )
         logger.info("Signature verified for %s", path.name)
 

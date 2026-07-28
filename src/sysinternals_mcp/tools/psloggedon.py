@@ -14,9 +14,7 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="psloggedon")
     def list_logged_on_users(
-        local: Annotated[
-            bool, Field(default=True, description="Show locally logged-on users")
-        ] = True,
+        local: Annotated[bool, Field(default=True, description="Show locally logged-on users")] = True,
         network: Annotated[
             bool, Field(default=False, description="Show network logons from this machine (-x)")
         ] = False,
@@ -65,9 +63,11 @@ def _parse_psloggedon(text: str) -> dict:
             # Format: <user> <type> <sessions>
             parts = stripped.split(None, 3)
             if len(parts) >= 2:
-                users.append({
-                    "user": parts[0],
-                    "type": parts[1] if len(parts) > 1 else "",
-                    "detail": " ".join(parts[2:]) if len(parts) > 2 else "",
-                })
+                users.append(
+                    {
+                        "user": parts[0],
+                        "type": parts[1] if len(parts) > 1 else "",
+                        "detail": " ".join(parts[2:]) if len(parts) > 2 else "",
+                    }
+                )
     return {"success": True, "users": users, "count": len(users), "error": None}

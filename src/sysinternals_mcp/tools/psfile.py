@@ -15,12 +15,8 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="psfile")
     def list_remote_files(
-        path_filter: Annotated[
-            str | None, Field(default=None, description="Filter by path (optional)")
-        ] = None,
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
+        path_filter: Annotated[str | None, Field(default=None, description="Filter by path (optional)")] = None,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
     ) -> dict:
         """List files opened by remote systems via network shares.
 

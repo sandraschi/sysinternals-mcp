@@ -14,12 +14,8 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="psinfo")
     def system_info(
-        show_hotfixes: Annotated[
-            bool, Field(default=False, description="Show installed hotfixes (-h)")
-        ] = False,
-        show_services: Annotated[
-            bool, Field(default=False, description="Show running services (-s)")
-        ] = False,
+        show_hotfixes: Annotated[bool, Field(default=False, description="Show installed hotfixes (-h)")] = False,
+        show_services: Annotated[bool, Field(default=False, description="Show running services (-s)")] = False,
     ) -> dict:
         """Show detailed system information: OS version, uptime, hotfixes, services.
 

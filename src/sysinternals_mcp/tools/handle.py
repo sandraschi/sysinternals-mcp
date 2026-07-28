@@ -15,12 +15,8 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="handle64")
     def list_handles(
-        pattern: Annotated[
-            str | None, Field(default=None, description="Filter handles by name/pattern")
-        ] = None,
-        verbose: Annotated[
-            bool, Field(default=False, description="Verbose output with handle counts (-v)")
-        ] = False,
+        pattern: Annotated[str | None, Field(default=None, description="Filter handles by name/pattern")] = None,
+        verbose: Annotated[bool, Field(default=False, description="Verbose output with handle counts (-v)")] = False,
     ) -> dict:
         """List open handles and file locks on the system.
 
@@ -67,10 +63,12 @@ def _parse_handle_text(text: str) -> dict:
         # Format: <pid>: <name>  <type>  <handle>
         m = re.match(r"(\d+):\s+(.+?)\s{2,}(\w+)\s{2,}(\d+)", line)
         if m:
-            handles.append({
-                "pid": int(m.group(1)),
-                "name": m.group(2).strip(),
-                "type": m.group(3),
-                "handle": m.group(4),
-            })
+            handles.append(
+                {
+                    "pid": int(m.group(1)),
+                    "name": m.group(2).strip(),
+                    "type": m.group(3),
+                    "handle": m.group(4),
+                }
+            )
     return {"success": True, "handles": handles, "count": len(handles), "error": None}

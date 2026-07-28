@@ -15,9 +15,7 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="listdlls")
     def list_all_dlls(
-        verified: Annotated[
-            bool, Field(default=False, description="Only show verified DLLs (-v)")
-        ] = False,
+        verified: Annotated[bool, Field(default=False, description="Only show verified DLLs (-v)")] = False,
     ) -> dict:
         """List all loaded DLLs across all processes with version info.
 
@@ -70,12 +68,14 @@ def _parse_listdlls(text: str) -> dict:
             # DLL entry: 0x<base> 0x<size> <name> <version>
             m = re.match(r"\s*(0x[0-9a-fA-F]+)\s+(0x[0-9a-fA-F]+)\s+(.+?)(?:\s+(\S+))?$", line)
             if m:
-                current_dlls.append({
-                    "base": m.group(1),
-                    "size": m.group(2),
-                    "name": m.group(3).strip(),
-                    "version": m.group(4) if m.group(4) else "",
-                })
+                current_dlls.append(
+                    {
+                        "base": m.group(1),
+                        "size": m.group(2),
+                        "name": m.group(3).strip(),
+                        "version": m.group(4) if m.group(4) else "",
+                    }
+                )
 
     if current_proc and current_dlls:
         processes.append({"process": current_proc, "dlls": current_dlls, "dll_count": len(current_dlls)})

@@ -17,12 +17,9 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
     def disk_usage(
         path: Annotated[str, Field(description="Directory path to analyze")],
         n_children: Annotated[
-            int | None,
-            Field(default=None, description="Show top N subdirectories by size (-n)")
+            int | None, Field(default=None, description="Show top N subdirectories by size (-n)")
         ] = None,
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
     ) -> dict:
         """Show disk usage for a directory tree, broken down by subdirectory.
 
@@ -73,10 +70,12 @@ def _parse_du(text: str) -> dict:
         if m:
             size_str = m.group(1).replace(",", "")
             try:
-                directories.append({
-                    "size_bytes": int(size_str),
-                    "path": m.group(2).strip(),
-                })
+                directories.append(
+                    {
+                        "size_bytes": int(size_str),
+                        "path": m.group(2).strip(),
+                    }
+                )
             except ValueError:
                 pass
         elif stripped.lower().startswith("total"):

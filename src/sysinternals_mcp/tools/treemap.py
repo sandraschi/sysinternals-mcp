@@ -127,9 +127,7 @@ def register_tool(app: FastMCP, _manager=None) -> None:
         top_n: Annotated[
             int, Field(default=60, description="Number of top processes to include in treemap", ge=5, le=200)
         ] = 60,
-        min_ws_mb: Annotated[
-            float, Field(default=1.0, description="Minimum working set in MB to include", ge=0)
-        ] = 1.0,
+        min_ws_mb: Annotated[float, Field(default=1.0, description="Minimum working set in MB to include", ge=0)] = 1.0,
     ) -> dict:
         """Generate a WizTree-style interactive treemap of process memory usage.
 
@@ -149,7 +147,9 @@ def register_tool(app: FastMCP, _manager=None) -> None:
         _pwsh = "powershell"
         proc = subprocess.run(
             [
-                _pwsh, "-NoProfile", "-Command",
+                _pwsh,
+                "-NoProfile",
+                "-Command",
                 r"Get-Process | Where-Object { $_.Id -gt 0 } | Sort-Object WorkingSet64 -Descending "
                 r"| Select-Object -First 200 @{N='Name';E={$_.ProcessName}}, "
                 r"@{N='WS_MB';E={[math]::Round($_.WorkingSet64 / 1MB, 1)}}, "
@@ -158,7 +158,9 @@ def register_tool(app: FastMCP, _manager=None) -> None:
                 r"@{N='VM_MB';E={[math]::Round($_.VirtualMemorySize64 / 1MB, 1)}} "
                 r"| ConvertTo-Json -Compress",
             ],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
             creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
         )
 
@@ -170,6 +172,7 @@ def register_tool(app: FastMCP, _manager=None) -> None:
 
 def _generate_treemap(json_text: str, top_n: int, min_ws_mb: float) -> dict:
     import json as _json
+
     try:
         data = _json.loads(json_text)
         if isinstance(data, dict):
@@ -183,8 +186,13 @@ def _generate_treemap(json_text: str, top_n: int, min_ws_mb: float) -> dict:
     data = data[:top_n]
 
     if not data:
-        return {"success": False, "file_path": "", "processes": 0, "total_mb": 0,
-                "error": "No processes meet the minimum WS_MB threshold"}
+        return {
+            "success": False,
+            "file_path": "",
+            "processes": 0,
+            "total_mb": 0,
+            "error": "No processes meet the minimum WS_MB threshold",
+        }
 
     total_mb = sum(d.get("WS_MB", 0) for d in data)
 
@@ -208,30 +216,44 @@ def _generate_treemap(json_text: str, top_n: int, min_ws_mb: float) -> dict:
 def _fallback_psutil(top_n: int, min_ws_mb: float) -> dict:
     try:
         import psutil
+
         data = []
         for p in psutil.process_iter(["pid", "name", "memory_info"]):
             try:
                 mi = p.info.get("memory_info")
                 ws = (mi.rss if mi else 0) / 1_048_576
                 if ws >= min_ws_mb:
-                    data.append({
-                        "Name": p.info.get("name", ""),
-                        "WS_MB": round(ws, 1),
-                        "PID": p.info["pid"],
-                    })
+                    data.append(
+                        {
+                            "Name": p.info.get("name", ""),
+                            "WS_MB": round(ws, 1),
+                            "PID": p.info["pid"],
+                        }
+                    )
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 pass
         data.sort(key=lambda d: d["WS_MB"], reverse=True)
         data = data[:top_n]
         import json as _json
+
         html = _TREEMAP_HTML.replace("%DATA%", _json.dumps(data, indent=2))
         out_dir = Path(tempfile.gettempdir()) / "sysinternals-mcp"
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / "memory_treemap.html"
         out_path.write_text(html, encoding="utf-8")
         total_mb = sum(d["WS_MB"] for d in data)
-        return {"success": True, "file_path": str(out_path), "processes": len(data),
-                "total_mb": round(total_mb, 0), "error": None}
+        return {
+            "success": True,
+            "file_path": str(out_path),
+            "processes": len(data),
+            "total_mb": round(total_mb, 0),
+            "error": None,
+        }
     except ImportError:
-        return {"success": False, "file_path": "", "processes": 0, "total_mb": 0,
-                "error": "No process data source (try psutil)"}
+        return {
+            "success": False,
+            "file_path": "",
+            "processes": 0,
+            "total_mb": 0,
+            "error": "No process data source (try psutil)",
+        }

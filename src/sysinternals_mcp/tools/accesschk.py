@@ -17,15 +17,10 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
     def check_permissions(
         path: Annotated[str, Field(description="File, directory, registry path, or service name")],
         target: Annotated[
-            str | None,
-            Field(default=None, description="User or group to check (omit for effective access)")
+            str | None, Field(default=None, description="User or group to check (omit for effective access)")
         ] = None,
-        recursive: Annotated[
-            bool, Field(default=False, description="Recurse subdirectories (-s)")
-        ] = False,
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
+        recursive: Annotated[bool, Field(default=False, description="Recurse subdirectories (-s)")] = False,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
     ) -> dict:
         """Check effective permissions on files, directories, registry keys, or services.
 

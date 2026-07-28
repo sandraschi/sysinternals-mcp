@@ -14,12 +14,8 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="pslist")
     def list_processes(
-        include_kernel: Annotated[
-            bool, Field(default=False, description="Also show kernel processes (-k)")
-        ] = False,
-        tree: Annotated[
-            bool, Field(default=False, description="Show process tree (-t)")
-        ] = False,
+        include_kernel: Annotated[bool, Field(default=False, description="Also show kernel processes (-k)")] = False,
+        tree: Annotated[bool, Field(default=False, description="Show process tree (-t)")] = False,
     ) -> dict:
         """List processes with PID, CPU time, thread count, and handle count.
 
@@ -80,12 +76,20 @@ def _parse_pslist(text: str) -> dict:
                 priv_str = parts[7]
                 cpu_time = parts[8] if len(parts) > 8 else ""
                 elapsed = parts[9] if len(parts) > 9 else ""
-                processes.append({
-                    "name": name, "pid": pid, "priority": pri,
-                    "threads": thd, "handles": hnd,
-                    "vm_kb": vm_str, "ws_kb": ws_str, "priv_kb": priv_str,
-                    "cpu_time": cpu_time, "elapsed": elapsed,
-                })
+                processes.append(
+                    {
+                        "name": name,
+                        "pid": pid,
+                        "priority": pri,
+                        "threads": thd,
+                        "handles": hnd,
+                        "vm_kb": vm_str,
+                        "ws_kb": ws_str,
+                        "priv_kb": priv_str,
+                        "cpu_time": cpu_time,
+                        "elapsed": elapsed,
+                    }
+                )
             except (ValueError, IndexError):
                 pass
     return {"success": True, "processes": processes, "count": len(processes), "error": None}

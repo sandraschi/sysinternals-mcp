@@ -17,15 +17,9 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
     @app.tool(name="sigcheck")
     def run_sigcheck(
         path: Annotated[str, Field(description="File or directory path to scan")],
-        recursive: Annotated[
-            bool, Field(default=False, description="Scan subdirectories recursively (-s)")
-        ] = False,
-        virus_total: Annotated[
-            bool, Field(default=False, description="Look up SHA-256 on VirusTotal (-v)")
-        ] = False,
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
+        recursive: Annotated[bool, Field(default=False, description="Scan subdirectories recursively (-s)")] = False,
+        virus_total: Annotated[bool, Field(default=False, description="Look up SHA-256 on VirusTotal (-v)")] = False,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
     ) -> dict:
         """Verify file digital signatures, version info, and optionally check VirusTotal.
 

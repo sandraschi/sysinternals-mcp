@@ -16,18 +16,10 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="autorunsc")
     def run_autorunsc(
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
-        hashes: Annotated[
-            bool, Field(default=False, description="Include SHA-1 hashes (-h)")
-        ] = False,
-        verify: Annotated[
-            bool, Field(default=False, description="Verify digital signatures (-v)")
-        ] = False,
-        all_users: Annotated[
-            bool, Field(default=False, description="Check all user accounts (-a *)")
-        ] = False,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
+        hashes: Annotated[bool, Field(default=False, description="Include SHA-1 hashes (-h)")] = False,
+        verify: Annotated[bool, Field(default=False, description="Verify digital signatures (-v)")] = False,
+        all_users: Annotated[bool, Field(default=False, description="Check all user accounts (-a *)")] = False,
     ) -> dict:
         """Scan startup programs, scheduled tasks, services, drivers, and browser extensions.
 
@@ -61,12 +53,8 @@ def register_tool(app: FastMCP, manager: BinaryManager) -> None:
 
     @app.tool(name="autorunsc_schedule")
     def run_autorunsc_schedule(
-        accept_eula: Annotated[
-            bool | None, Field(default=None, description="Accept EULA (stored once)")
-        ] = None,
-        hashes: Annotated[
-            bool, Field(default=False, description="Include SHA-1 hashes (-h)")
-        ] = False,
+        accept_eula: Annotated[bool | None, Field(default=None, description="Accept EULA (stored once)")] = None,
+        hashes: Annotated[bool, Field(default=False, description="Include SHA-1 hashes (-h)")] = False,
     ) -> dict:
         """Scan only scheduled tasks autoruns (fast subset).
 

@@ -7,6 +7,7 @@ import sys
 if os.name == "nt":
     try:
         import msvcrt
+
         msvcrt.setmode(sys.stdin.fileno(), os.O_BINARY)
         msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
     except (ImportError, OSError, AttributeError):
@@ -71,6 +72,7 @@ def main():
     port = os.environ.get("MCP_PORT") or os.environ.get("PORT")
     if port:
         import uvicorn
+
         host = os.environ.get("MCP_HOST", "127.0.0.1")
         sys.argv = ["sysinternals-mcp", "--mode", "http", "--host", host, "--port", str(port)]
         uvicorn.run(app.sse_app(), host=host, port=int(port), log_level="info")

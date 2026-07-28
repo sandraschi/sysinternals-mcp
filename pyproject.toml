@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "FastMCP 3.4 wrapper around 12 Sysinternals CLI tools: autorunsc, handle64, pslist, listdlls, tcpvcon, sigcheck, accesschk, psloggedon, psfile, coreinfo, du, psinfo"
 authors = [{ name = "Sandra Schipal" }]
 dependencies = [
-    "fastmcp>=3.4.2,<4",
+    "fastmcp>=3.4.4,<4",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -22,7 +22,7 @@ include = ["sysinternals_mcp*"]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.9",
+    "ruff>=0.16.0,<0.17",
     "pytest>=8.0.0",
     "pytest-asyncio",
 ]

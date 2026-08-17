@@ -75,7 +75,7 @@ def main():
 
         host = os.environ.get("MCP_HOST", "127.0.0.1")
         sys.argv = ["sysinternals-mcp", "--mode", "http", "--host", host, "--port", str(port)]
-        uvicorn.run(app.sse_app(), host=host, port=int(port), log_level="info")
+        uvicorn.run(app.http_app(), host=host, port=int(port), log_level="info")
     else:
         app.run(transport="stdio")
 

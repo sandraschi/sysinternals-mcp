@@ -135,10 +135,20 @@ class BinaryManager:
         if os.name != "nt":
             logger.warning("Skipping Authenticode verification on non-Windows")
             return
-        ps = "powershell"
+        # Prefer pwsh: Windows PowerShell 5.1 intermittently fails to autoload
+        # Microsoft.PowerShell.Security under `uv run` (RC=1, empty stdout),
+        # which used to surface as a cryptic "status=, subject=" failure.
+        # Fall back to powershell; fail loudly if neither shell can check.
+        shell = os.environ.get("SYSINTERNALS_VERIFY_SHELL") or self._working_shell(path)
+        if shell is None:
+            raise RuntimeError(
+                "Authenticode check unavailable: neither pwsh nor powershell "
+                "could run Get-AuthenticodeSignature. Set SYSINTERNALS_VERIFY_SHELL "
+                "to a working shell."
+            )
         result = subprocess.run(
             [
-                ps,
+                shell,
                 "-NoProfile",
                 "-Command",
                 f"Get-AuthenticodeSignature '{path}' | Select-Object -ExpandProperty Status",
@@ -151,7 +161,7 @@ class BinaryManager:
         if status != "Valid":
             detail = subprocess.run(
                 [
-                    ps,
+                    shell,
                     "-NoProfile",
                     "-Command",
                     f"(Get-AuthenticodeSignature '{path}').SignerCertificate.Subject",
@@ -168,6 +178,24 @@ class BinaryManager:
                     f"Authenticode verification failed for {path.name}: status={status}, subject={subject}"
                 )
         logger.info("Signature verified for %s", path.name)
+
+    @staticmethod
+    def _working_shell(path: Path) -> str | None:
+        """Return the first shell that can run Get-AuthenticodeSignature, else None."""
+        probe = f"Get-AuthenticodeSignature '{path}' | Select-Object -ExpandProperty Status"
+        for shell in ("pwsh", "powershell"):
+            try:
+                result = subprocess.run(
+                    [shell, "-NoProfile", "-Command", probe],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+            except FileNotFoundError:
+                continue
+            if result.returncode == 0 and result.stdout.strip():
+                return shell
+        return None
 
     @staticmethod
     def _exe_name(name: str) -> str:

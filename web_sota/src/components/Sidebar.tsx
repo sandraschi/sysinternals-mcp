@@ -1,8 +1,9 @@
-import { Menu, X, Activity, Cpu, HardDrive, Network, LayoutDashboard } from "lucide-react";
+import { Menu, X, Activity, Cpu, HardDrive, Network, LayoutDashboard, Wrench } from "lucide-react";
 import { useState } from "react";
 
 const NAV = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { label: "Binaries", icon: Wrench, href: "/tools" },
   { label: "Processes", icon: Cpu, href: "/processes" },
   { label: "Memory", icon: Activity, href: "/memory" },
   { label: "Disk", icon: HardDrive, href: "/disk" },
